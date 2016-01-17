@@ -14,14 +14,16 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String EXTRA_MESSAGE_ITEM_ID = "extra_message_id";
-    public static final String EXTRA_MESSAGE_ITEM_CONTENT = "extra_message_content";
+    public static final String EXTRA_MESSAGE_ITEM_ID = "extra_message_item_id";
+    public static final String EXTRA_MESSAGE_ITEM_TITLE = "extra_message_item_title";
+    public static final String EXTRA_MESSAGE_ITEM_PRIORITY = "extra_message_item_priority";
     public static final int REQUEST_CODE = 200;
 
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+    List<Item> items;
+    ItemAdapter itemsAdapter;
     ListView lvItems;
 
     @Override
@@ -29,11 +31,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lvItems = (ListView) findViewById(R.id.lvItems);
-
-        //items = new ArrayList<>();
         readItems();
-        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+
+        itemsAdapter = new ItemAdapter(this, items);
+        lvItems = (ListView) findViewById(R.id.lvItems);
         lvItems.setAdapter(itemsAdapter);
 
         setupListViewListener();
@@ -43,13 +44,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK && requestCode == REQUEST_CODE){
-            String newContent = data.getStringExtra(EXTRA_MESSAGE_ITEM_CONTENT);
+            //String itemTitle = data.getStringExtra(EXTRA_MESSAGE_ITEM_TITLE);
+            String newPriority = data.getStringExtra(EXTRA_MESSAGE_ITEM_PRIORITY);
             int index = data.getIntExtra(EXTRA_MESSAGE_ITEM_ID, -1);
 
             if(index != -1){
-                items.set(index, newContent);
+                Item currItem = items.get(index);
+                Item newItem = new Item(currItem.getTitle(), newPriority);
+                items.set(index, newItem);
                 itemsAdapter.notifyDataSetChanged();
-                writeItems();
+
             }
         }
     }
@@ -57,9 +61,10 @@ public class MainActivity extends AppCompatActivity {
     public void onAddItem(View v){
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
+        Item newItem = new Item(itemText, "Medium");
+        itemsAdapter.add(newItem);
         etNewItem.setText("");
-        writeItems();
+        ItemDatabaseHelper.getInstance(this).addItem(newItem);
     }
 
     private void setupListViewListener(){
@@ -67,9 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        items.remove(i);
-                        itemsAdapter.notifyDataSetChanged();
-                        writeItems();
+                        deleteItem(i);
                         return true;
                     }
                 }
@@ -87,29 +90,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readItems(){
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try{
-            items = new ArrayList<>(FileUtils.readLines(todoFile));
-        } catch (Exception e){
-            items = new ArrayList<>();
-        }
+        ItemDatabaseHelper databaseHelper = ItemDatabaseHelper.getInstance(this);
+        items = databaseHelper.readAllItems();
     }
 
-    private void writeItems(){
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(todoFile, items);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void deleteItem(int index){
+        Item itemToRemove = items.get(index);
+        items.remove(index);
+        itemsAdapter.notifyDataSetChanged();
+        ItemDatabaseHelper.getInstance(this).deleteItem(itemToRemove);
     }
 
     private void startItemEditPage(int index){
         Intent intent = new Intent(this, EditItemActivity.class);
         intent.putExtra(EXTRA_MESSAGE_ITEM_ID, index);
-        intent.putExtra(EXTRA_MESSAGE_ITEM_CONTENT, items.get(index));
+        intent.putExtra(EXTRA_MESSAGE_ITEM_TITLE, items.get(index).getTitle());
+        intent.putExtra(EXTRA_MESSAGE_ITEM_PRIORITY, items.get(index).getPriority());
         startActivityForResult(intent, REQUEST_CODE);
     }
 }

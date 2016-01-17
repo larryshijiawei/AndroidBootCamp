@@ -13,25 +13,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Edit Item Below:"
-        android:id="@+id/tvEditItem"
+        android:text="Item Title:"
+        android:id="@+id/tvItemTitle"
+        android:layout_marginLeft="49dp"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="42dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="70dp" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/etNewContent"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/tvEditItem"
-        android:layout_alignLeft="@+id/tvEditItem"
-        android:layout_alignStart="@+id/tvEditItem" />
+        android:id="@+id/etNewPriority"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/tvItemTitle"
+        android:layout_alignStart="@+id/tvItemTitle" />
 
     <Button
         android:layout_width="wrap_content"
@@ -39,8 +38,20 @@
         android:text="Save"
         android:id="@+id/btnSave"
         android:onClick="onClickSaveChange"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/etNewContent"
-        android:layout_alignStart="@+id/etNewContent" />
+        android:layout_marginTop="61dp"
+        android:layout_below="@+id/etNewPriority"
+        android:layout_alignLeft="@+id/etNewPriority"
+        android:layout_alignStart="@+id/etNewPriority" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Priority:"
+        android:id="@+id/tvPriority"
+        android:layout_above="@+id/etNewPriority"
+        android:layout_alignLeft="@+id/etNewPriority"
+        android:layout_alignStart="@+id/etNewPriority"
+        android:layout_marginBottom="44dp" />
 
 </RelativeLayout>
