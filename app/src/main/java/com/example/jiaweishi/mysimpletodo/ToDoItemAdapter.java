@@ -1,7 +1,6 @@
 package com.example.jiaweishi.mysimpletodo;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,9 @@ import java.util.List;
 /**
  * Created by jiaweishi on 1/16/16.
  */
-public class ItemAdapter extends ArrayAdapter<Item> {
+public class ToDoItemAdapter extends ArrayAdapter<Item> {
 
-    public ItemAdapter(Context context, List<Item> items){
+    public ToDoItemAdapter(Context context, List<Item> items){
         super(context, 0, items);
     }
 
@@ -27,8 +26,8 @@ public class ItemAdapter extends ArrayAdapter<Item> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item, parent, false);
         }
 
-        TextView tvName= (TextView) convertView.findViewById(R.id.itemName);
-        TextView tvPriority = (TextView) convertView.findViewById(R.id.itemPriority);
+        TextView tvName= (TextView) convertView.findViewById(R.id.tvItemName);
+        TextView tvPriority = (TextView) convertView.findViewById(R.id.tvItemPriority);
 
         tvName.setText(item.getTitle());
         tvPriority.setText(item.getPriority());

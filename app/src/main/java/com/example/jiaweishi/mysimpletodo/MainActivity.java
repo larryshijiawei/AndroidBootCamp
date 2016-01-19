@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE = 200;
 
     List<Item> items;
-    ItemAdapter itemsAdapter;
+    ToDoItemAdapter itemsAdapter;
     ListView lvItems;
 
     @Override
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         readItems();
 
-        itemsAdapter = new ItemAdapter(this, items);
+        itemsAdapter = new ToDoItemAdapter(this, items);
         lvItems = (ListView) findViewById(R.id.lvItems);
         lvItems.setAdapter(itemsAdapter);
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 Item newItem = new Item(currItem.getTitle(), newPriority);
                 items.set(index, newItem);
                 itemsAdapter.notifyDataSetChanged();
-
+                TodoItemDbHelper.getInstance(this).updateItem(newItem);
             }
         }
     }
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Item newItem = new Item(itemText, "Medium");
         itemsAdapter.add(newItem);
         etNewItem.setText("");
-        ItemDatabaseHelper.getInstance(this).addItem(newItem);
+        TodoItemDbHelper.getInstance(this).addItem(newItem);
     }
 
     private void setupListViewListener(){
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readItems(){
-        ItemDatabaseHelper databaseHelper = ItemDatabaseHelper.getInstance(this);
+        TodoItemDbHelper databaseHelper = TodoItemDbHelper.getInstance(this);
         items = databaseHelper.readAllItems();
     }
 
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         Item itemToRemove = items.get(index);
         items.remove(index);
         itemsAdapter.notifyDataSetChanged();
-        ItemDatabaseHelper.getInstance(this).deleteItem(itemToRemove);
+        TodoItemDbHelper.getInstance(this).deleteItem(itemToRemove);
     }
 
     private void startItemEditPage(int index){

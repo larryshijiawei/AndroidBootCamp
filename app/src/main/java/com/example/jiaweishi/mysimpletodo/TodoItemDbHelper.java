@@ -13,25 +13,25 @@ import java.util.List;
 /**
  * Created by jiaweishi on 1/14/16.
  */
-public class ItemDatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = ItemDatabaseHelper.class.getSimpleName();
+public class TodoItemDbHelper extends SQLiteOpenHelper {
+    private static final String TAG = TodoItemDbHelper.class.getSimpleName();
     private static final String DB_NAME = "itemDatabase";
     private static final int DB_VERSION = 1;
 
     private static final String KEY_ITEM_TITLE = "title";
     private static final String KEY_ITEM_PRIORITY = "priority";
 
-    private static ItemDatabaseHelper mInstance;
+    private static TodoItemDbHelper mInstance;
 
-    public static synchronized  ItemDatabaseHelper getInstance(Context context){
+    public static synchronized  TodoItemDbHelper getInstance(Context context){
         if(mInstance == null)
-            mInstance = new ItemDatabaseHelper(context);
+            mInstance = new TodoItemDbHelper(context);
 
         return mInstance;
     }
 
 
-    private ItemDatabaseHelper(Context context) {
+    private TodoItemDbHelper(Context context) {
         super(context, DB_NAME,null, DB_VERSION);
     }
 

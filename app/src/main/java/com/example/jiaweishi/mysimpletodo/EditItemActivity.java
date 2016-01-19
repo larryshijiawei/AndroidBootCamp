@@ -20,16 +20,16 @@ public class EditItemActivity extends AppCompatActivity {
         String title = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_ITEM_TITLE);
         String priority = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_ITEM_PRIORITY);
 
-        TextView itemTitle = (TextView) findViewById(R.id.tvItemTitle);
-        itemTitle.setText(title);
+        TextView tvItemTitle = (TextView) findViewById(R.id.tvItemTitle);
+        tvItemTitle.setText(title);
 
-        EditText editTextPriority = (EditText) findViewById(R.id.etNewPriority);
-        editTextPriority.setText(priority);
+        EditText eTItemPriority = (EditText) findViewById(R.id.etNewPriority);
+        eTItemPriority.setText(priority);
     }
 
     public void onClickSaveChange(View view){
-        EditText editText = (EditText) findViewById(R.id.etNewPriority);
-        String newPriority = editText.getText().toString();
+        EditText eTItemPriority = (EditText) findViewById(R.id.etNewPriority);
+        String newPriority = eTItemPriority.getText().toString();
 
         Intent intent = new Intent();
         intent.putExtra(MainActivity.EXTRA_MESSAGE_ITEM_ID, index);
